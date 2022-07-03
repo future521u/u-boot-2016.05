@@ -18,15 +18,10 @@ DECLARE_GLOBAL_DATA_PTR;
 
 #define FCLK_SPEED 1
 
-#if (FCLK_SPEED == 0)		/* Fout = 203MHz, Fin = 12MHz for Audio */
-#define M_MDIV	0xC3
-#define M_PDIV	0x4
+/* FCLK:400M, HCLK:100, PCLK:50*/
+#define M_MDIV	0x5c
+#define M_PDIV	0x1
 #define M_SDIV	0x1
-#elif (FCLK_SPEED == 1)		/* Fout = 202.8MHz */
-#define M_MDIV	0xA1
-#define M_PDIV	0x3
-#define M_SDIV	0x1
-#endif
 
 #define USB_CLOCK 1
 
@@ -61,11 +56,15 @@ int board_early_init_f(void)
 	writel(0xFFFFFF, &clk_power->locktime);
 
 	/* configure MPLL */
+    /*
 	writel((M_MDIV << 12) + (M_PDIV << 4) + M_SDIV,
 	       &clk_power->mpllcon);
+    */
 
 	/* some delay between MPLL and UPLL */
+    /*
 	pll_delay(4000);
+    */
 
 	/* configure UPLL */
 	writel((U_M_MDIV << 12) + (U_M_PDIV << 4) + U_M_SDIV,
@@ -96,8 +95,8 @@ int board_early_init_f(void)
 
 int board_init(void)
 {
-	/* arch number of SMDK2410-Board */
-	gd->bd->bi_arch_number = MACH_TYPE_SMDK2410;
+	/* arch number of SMDK2440-Board */
+	gd->bd->bi_arch_number = MACH_TYPE_SMDK2440;
 
 	/* adress of boot parameters */
 	gd->bd->bi_boot_params = 0x30000100;

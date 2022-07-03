@@ -61,6 +61,8 @@ copyex:
 #  define pWTCON	0x53000000
 #  define INTMSK	0x4A000008	/* Interrupt-Controller base addresses */
 #  define INTSUBMSK	0x4A00001C
+#  define LOCKTIME	0x4C000000	
+#  define MPLLCON	0x4C000004
 #  define CLKDIVN	0x4C000014	/* clock divisor register */
 # endif
 
@@ -74,17 +76,39 @@ copyex:
 	mov	r1, #0xffffffff
 	ldr	r0, =INTMSK
 	str	r1, [r0]
+
+	ldr	r0, =LOCKTIME
+	mov	r1, #0xffffffff
+	str	r1, [r0]
+
 # if defined(CONFIG_S3C2410)
 	ldr	r1, =0x3ff
 	ldr	r0, =INTSUBMSK
 	str	r1, [r0]
 # endif
 
+# if defined(CONFIG_S3C2440)
+	ldr	r0, =CLKDIVN
+	/* FCLK:HCLK:PCLK = 8:2:1 */
+	mov	r1, #5
+	str	r1, [r0]
+
+    //MMU_SetAsyncBusMode
+    mrc p15, 0, r0, c1, c0, 0
+    orr r0, #0xc0000000
+    mcr p15, 0, r0, c1, c0, 0
+
+    //input freq 12M, output freq 400M
+	ldr	r0, =MPLLCON
+    ldr r1, =((92<<12) | (1<<4) | (1<<0))
+	str	r1, [r0]
+#else
+	ldr	r0, =CLKDIVN
 	/* FCLK:HCLK:PCLK = 1:2:4 */
 	/* default FCLK is 120 MHz ! */
-	ldr	r0, =CLKDIVN
 	mov	r1, #3
 	str	r1, [r0]
+#endif
 #endif	/* CONFIG_S3C24X0 */
 
 	/*
