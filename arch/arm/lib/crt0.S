@@ -82,6 +82,17 @@ ENTRY(_main)
 #else
 	bic	sp, sp, #7	/* 8-byte alignment for ABI compliance */
 #endif
+
+#if defined(CONFIG_SPL_BUILD)
+	/* Read u-boot from nor/Nandflash to SDRAM */
+	ldr r0, = CONFIG_UBOOT_NAND_ADDR
+	ldr r1, =CONFIG_SYS_TEXT_BASE
+	ldr r2, =CONFIG_UBOOT_LENGTH
+
+	bl copy_code_to_sdram
+
+	ldr pc, =CONFIG_SYS_TEXT_BASE
+#else 
 	mov	r0, sp
 	bl	board_init_f_alloc_reserve
 	mov	sp, r0
@@ -91,8 +102,6 @@ ENTRY(_main)
 
 	mov	r0, #0
 	bl	board_init_f
-
-#if ! defined(CONFIG_SPL_BUILD)
 
 /*
  * Set up intermediate environment (new sp and gd) and call
@@ -129,7 +138,8 @@ here:
 /* Set up final (full) environment */
 
 	bl	c_runtime_cpu_setup	/* we still call old routine here */
-#endif
+#endif //CONFIG_SPL_BUILD
+
 #if !defined(CONFIG_SPL_BUILD) || defined(CONFIG_SPL_FRAMEWORK)
 # ifdef CONFIG_SPL_BUILD
 	/* Use a DRAM stack for the rest of SPL, if requested */
@@ -175,5 +185,18 @@ clbss_l:cmp	r0, r1			/* while not at end of BSS */
 #endif
 	/* we should not return here. */
 #endif
+
+.align 4
+test1:
+	.string "test1"
+
+.align 4
+test2:
+	.string "test2"
+
+.align 4
+test3:
+	.string "test3"
+
 
 ENDPROC(_main)

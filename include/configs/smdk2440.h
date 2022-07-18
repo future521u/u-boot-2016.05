@@ -21,8 +21,6 @@
 #define CONFIG_S3C2440		/* specifically a SAMSUNG S3C2440 SoC */
 #define CONFIG_SMDK2440		/* on a SAMSUNG SMDK2440 Board */
 
-#define CONFIG_SYS_TEXT_BASE	0x0
-
 #define CONFIG_SYS_ARM_CACHE_WRITETHROUGH
 
 /* input clock of PLL (the SMDK2440 has 12MHz input clock) */
@@ -187,5 +185,10 @@
 				GENERATED_GBL_DATA_SIZE)
 
 #define CONFIG_BOARD_EARLY_INIT_F
+
+#define CONFIG_UBOOT_NAND_ADDR	0x20000
+#define CONFIG_SYS_TEXT_BASE	0x30008000
+#define CONFIG_UBOOT_LENGTH		0x100000
+#define CONFIG_SYS_SPL_BASE		0
 
 #endif /* __CONFIG_H */
