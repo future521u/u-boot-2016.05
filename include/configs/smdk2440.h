@@ -72,9 +72,7 @@
  */
 #define CONFIG_CMD_BSP
 #define CONFIG_CMD_DATE
-/*
 #define CONFIG_CMD_NAND
- */
 #define CONFIG_CMD_REGINFO
 
 #define CONFIG_CMDLINE_EDITING
