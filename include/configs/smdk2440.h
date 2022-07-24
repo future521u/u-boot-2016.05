@@ -33,9 +33,12 @@
 /*
  * Hardware drivers
  */
-#define CONFIG_CS8900		/* we have a CS8900 on-board */
-#define CONFIG_CS8900_BASE	0x19000300
-#define CONFIG_CS8900_BUS16	/* the Linux driver does accesses as shorts */
+#define CONFIG_DRIVER_DM9000		/* we have a DM9000 on-board */
+#define CONFIG_DM9000_BASE	0x20000000
+#define DM9000_IO			CONFIG_DM9000_BASE
+#define DM9000_DATA			(CONFIG_DM9000_BASE+4)
+
+
 
 /*
  * select serial console configuration
@@ -84,8 +87,10 @@
 #define CONFIG_ZERO_BOOTDELAY_CHECK
 
 #define CONFIG_NETMASK		255.255.255.0
-#define CONFIG_IPADDR		10.0.0.110
-#define CONFIG_SERVERIP		10.0.0.1
+#define CONFIG_IPADDR		192.168.0.17
+#define CONFIG_SERVERIP		192.168.0.111
+#define CONFIG_GATEWAYIP	192.168.0.1
+#define CONFIG_ETHADDR      00:0c:29:4d:e4:f4
 
 #if defined(CONFIG_CMD_KGDB)
 #define CONFIG_KGDB_BAUDRATE	115200	/* speed to run kgdb serial port */
